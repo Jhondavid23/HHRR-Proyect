@@ -1,0 +1,70 @@
+CREATE DATABASE HHRRMODULE
+
+CREATE TABLE [Role] (
+    idRole INT PRIMARY KEY IDENTITY(1,1),
+    nameRol VARCHAR(50) -- 'Administrador', 'Colaborador', etc.
+)
+
+CREATE TABLE StateUser(
+	idStateUser INT PRIMARY KEY IDENTITY(1,1),
+	nameState VARCHAR(255) NOT NULL,
+	createdAt DATETIME DEFAULT GETDATE(),
+	updatedAt DATETIME
+) 
+
+CREATE TABLE [User] (
+    idUser INT PRIMARY KEY IDENTITY(1,1),
+    identityNumber VARCHAR(50) UNIQUE NOT NULL,
+    fullName VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+	[password] VARCHAR(255) NOT NULL,
+	[state] INT REFERENCES StateUser(idStateUser) NOT NULL, -- Activo, Inactivo, Suspendido, etc.
+    roleId INT FOREIGN KEY REFERENCES [Role](idRole), -- Se relaciona con los Roles
+    createdAt DATETIME DEFAULT GETDATE(),
+	updatedAt DATETIME
+)
+
+CREATE TABLE Employed(
+	idEmployed INT PRIMARY KEY IDENTITY(1,1),
+	userId INT REFERENCES [User](idUser) NOT NULL,
+	position VARCHAR(100),
+	department VARCHAR(100),
+	entryDate DATETIME NOT NULL,
+	photo VARCHAR(MAX),
+	cretedAt DATETIME DEFAULT GETDATE(),
+	updatedAt DATETIME
+)
+
+CREATE TABLE TypeRecognitions(
+	idTypeRecognition INT PRIMARY KEY IDENTITY(1,1),
+	typeName VARCHAR(255),
+	createdAt DATETIME DEFAULT GETDATE(),
+	updatedAt DATETIME
+)
+
+CREATE TABLE Recognition(
+	idRecognition INT PRIMARY KEY IDENTITY(1,1),
+	idEmployed INT REFERENCES Employed(idEmployed),
+	typeRecognitions INT REFERENCES TypeRecognitions(idTypeRecognition),
+	[description] VARCHAR(255) NOT NULL,
+	recognitionDate DATETIME NOT NULL,
+	[value] VARCHAR(255) NOT NULL,
+	createdAt DATETIME DEFAULT GETDATE(),
+	updatedAt DATETIME
+)
+
+CREATE TABLE RecognitionHistory(
+	idRecognitionHistory INT PRIMARY KEY IDENTITY(1,1),
+	recognitionId INT REFERENCES Recognition(idRecognition) NOT NULL,
+	userId INT REFERENCES [User](idUser) NOT NULL,
+	[action] VARCHAR(255) NOT NULL,
+	createdAt DATETIME DEFAULT GETDATE(),
+	updatedAt DATETIME
+)
+
+CREATE TABLE DeciplinaryProcess(
+	idProcess INT PRIMARY KEY IDENTITY(1,1),
+	idEmployed INT REFERENCES Employed(idEmployed) NOT NULL,
+	reason TEXT NOT NULL,
+	processDate DATETIME NOT NULL,
+)

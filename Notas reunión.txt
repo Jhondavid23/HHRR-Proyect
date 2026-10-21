@@ -1,0 +1,15 @@
+Mostrar del más reciente al mas antiguo los reconocimientos
+
+Cuando la sanción se suspensión en el modulo de disciplinario, se habilitará un campo para colocar los días, los campos de sanción, son Apsuelto, Llamado de antención, suspensión de contrato, terminación de contrato, descuento por perdidas o daño 
+
+Restringir información por roles, el rol de amanda, el que crea la novedad, solo podrá ver lo que ella creó, nada más. Debe ver al crear, quién abrió el proceso, la sede y el cliente. el cliente debe estar en el formato de creación por que puede cambiar en donde hizo la falta.
+Permitir subir varios archivos, fotos, audios y videos
+
+En el formato de creación debe estar el campo del responsable del reporte, campos de si hay prueba, que acepte 3 archivos y un pdf, foto o vídeo 
+
+Mostrar en la tabla la presunta falta y la descripción,
+Colocar en el formato de creación fecha de descargo y hora de citación
+
+Al momento de preguntar si se realizaron descargos, habilitarle para que coloque otra fecha.
+
+En la notificación, validar la fecha, colocar un estado nuevo pendiente por fecha de notificación (pendiente definir fecha, pendiente notificar, notificado)

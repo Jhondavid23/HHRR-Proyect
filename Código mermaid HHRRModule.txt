@@ -1,0 +1,314 @@
+erDiagram
+    User ||--o{ Employed : "tiene"
+    User ||--o{ DisciplinaryProcess : "crea"
+    User ||--o{ DisciplinaryResolution : "crea"
+    User ||--o{ Notification : "crea"
+    User ||--o{ Log : "genera"
+    User ||--o{ File : "crea"
+    User ||--o{ SalaryAdvance : "crea"
+    User ||--o{ SalaryAdvanceAuthorized : "autoriza"
+    User ||--o{ SalaryAdvanceUpdated : "actualiza"
+    
+    Role ||--o{ User : "tiene"
+    Role ||--o{ RoleSystemPermission : "posee"
+    Role ||--o{ RoleProcessPermission : "posee"
+    Role ||--o{ MenuRol : "asigna"
+    
+    SystemPermission ||--o{ RoleSystemPermission : "asignado a"
+    ProcessPermission ||--o{ RoleProcessPermission : "asignado a"
+    
+    Process ||--o{ ProcessState : "tiene"
+    Process ||--o{ ProcessPermission : "define"
+    Process ||--o{ DisciplinaryProcess : "tipo"
+    Process ||--o{ SalaryAdvance : "tipo"
+    
+    ProcessState ||--o{ ProcessPermission : "asociado a"
+    ProcessState ||--o{ DisciplinaryProcess : "estado actual"
+    ProcessState ||--o{ SalaryAdvance : "estado actual"
+    
+    UserState ||--o{ User : "define"
+    UserState ||--o{ Employed : "define"
+    
+    Employed ||--o{ RequestFormat : "solicita"
+    Employed ||--o{ DisciplinaryProcess : "recibe"
+    Employed ||--o{ Recognition : "obtiene"
+    Employed ||--o{ SalaryAdvance : "solicita"
+    
+    DisciplinaryProcess ||--o{ DisciplinaryFiles : "contiene"
+    DisciplinaryProcess ||--o{ DisciplinaryResolution : "tiene"
+    DisciplinaryProcess ||--o{ Notification : "genera"
+    
+    SalaryAdvance ||--o{ SalaryAdvanceFiles : "contiene"
+    
+    Recognition ||--o{ RecognitionFile : "contiene"
+
+    File ||--o{ DisciplinaryFiles : "referencia"
+    File ||--o{ RecognitionFile : "referencia"
+    File ||--o{ SalaryAdvanceFiles : "referencia"
+    
+    TypeFormat ||--o{ RequestFormat : "tiene"
+    TypeFormat ||--o{ TypeFieldFormat : "define"
+    
+    TypeFieldFormat ||--o{ FieldFormat : "categoriza"
+    
+    RequestFormat ||--o{ FieldFormat : "contiene"
+    
+    Menu ||--o{ MenuRol : "asigna"
+
+    User {
+        int idUser PK
+        nvarchar fullName
+        nvarchar identityDocument
+        nvarchar documentIdType
+        nvarchar email
+        nvarchar password
+        nvarchar urlPhoto
+        int roleId FK
+        int stateId FK
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    Role {
+        int idRole PK
+        nvarchar nameRol
+        int parentRoleId FK
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    SystemPermission {
+        int idPermission PK
+        string permissionName
+        string description
+        string category
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    RoleSystemPermission {
+        int idRoleSystemPermission PK
+        int roleId FK
+        int systemPermissionId FK
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    ProcessPermission {
+        int idProcessPermission PK
+        int processId FK
+        int stateId FK
+        string permissionType
+        string description
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    RoleProcessPermission {
+        int idRoleProcessPermission PK
+        int roleId FK
+        int processPermissionId FK
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    UserState {
+        int idState PK
+        nvarchar nameState
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    Employed {
+        int idEmployed PK
+        int userId FK
+        int stateId FK
+        nvarchar position
+        nvarchar department
+        varchar clientAssigned
+        date entryDate
+        varchar typeEmployed
+        nvarchar urlPhoto
+        datetime createdAt
+        datetime updatedAt
+        nvarchar fullName
+        nvarchar identityDocument
+        nvarchar documentIdType
+        nvarchar email
+    }
+
+    Process {
+        int idProcess PK
+        nvarchar nameType
+        nvarchar typeCode
+        int version
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    ProcessState {
+        int idState PK
+        nvarchar nameState
+        int processId FK
+        int position
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    DisciplinaryProcess {
+        int idDisciplinaryProcess PK
+        int employedId FK
+        int processId FK
+        int stateProcessId FK
+        nvarchar typeOfFault
+        datetime dateOfFault
+        nvarchar description
+        datetime createdAt
+        datetime updatedAt
+        varchar reportResponsible
+        int createdBy FK
+        varchar branchAssigned
+        varchar actualClient
+        datetime dischargeDate
+    }
+
+    SalaryAdvance {
+        int idSalaryAdvance PK
+        int employedId FK
+        int processId FK
+        int stateProcessId FK
+        nvarchar requestType
+        decimal amount
+        int biweeklyInstallments
+        nvarchar payrollDiscountCode
+        nvarchar city
+        nvarchar description
+        int createdBy FK
+        int updatedBy FK
+        int authorizedBy FK
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    DisciplinaryResolution {
+        int idResolution PK
+        int disciplinaryProcessId FK
+        datetime resolutionDate
+        nvarchar sanctionApplied
+        int sanctionDays
+        nvarchar descriptionSanction
+        int createdBy FK
+        int updatedBy FK
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    Notification {
+        int idNotification PK
+        int disciplinaryProcessId FK
+        bit isNotificationDate
+        datetime notificationDate
+        nvarchar typeOfNotification
+        nvarchar description
+        datetime createdAt
+        datetime updatedAt
+        int createdBy FK
+        int updatedBy FK
+    }
+
+    DisciplinaryFiles {
+        int idDisciplinaryFile PK
+        int fileId FK
+        nvarchar stateFile
+        int disciplinaryProcessId FK
+        datetime createdAt
+    }
+
+    SalaryAdvanceFiles {
+        int idSalaryAdvanceFile PK
+        int salaryAdvanceId FK
+        int fileId FK
+        nvarchar fileType
+        nvarchar stateFile
+        datetime createdAt
+    }
+
+    File {
+        int idFile PK
+        nvarchar nameFile
+        nvarchar ubicationFile
+        nvarchar linkFileCloudLocal
+        nvarchar idCloudService
+        nvarchar typeFile
+        datetime createdAt
+        int createdBy FK
+    }
+
+    Menu {
+        int idMenu PK
+        varchar nombre
+        varchar icono
+        varchar url
+    }
+
+    MenuRol {
+        int idMenuRol PK
+        int idMenu FK
+        int idRol FK
+    }
+
+    Recognition {
+        int idRecognitions PK
+        int idEmployed FK
+        nvarchar typeRecognitions
+        nvarchar description
+        date recognitionDate
+        decimal value
+        varchar image
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    RecognitionFile {
+        int idRecognitionFile PK
+        int idRecognition FK
+        int idFile FK
+        nvarchar stateField
+    }
+
+    RequestFormat {
+        int idRequest PK
+        nvarchar nameRequest
+        int idEmployed FK
+        int idTypeFormat FK
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    TypeFormat {
+        int idTypeFormat PK
+        nvarchar nameType
+        nvarchar typeCode
+        int version
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    TypeFieldFormat {
+        int idTypeField PK
+        int idTypeFormat FK
+        nvarchar nameTypeField
+        nvarchar TypeValue
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    FieldFormat {
+        int idField PK
+        int idTypeField FK
+        int idRequestFormat FK
+        nvarchar nameFieldRequest
+        nvarchar valueField
+        datetime createdAt
+        datetime updatedAt
+    }
